@@ -1,7 +1,6 @@
 import streamlit as st
 import tensorflow as tf
 import numpy as np
-import cv2
 from PIL import Image
 
 # Constants
@@ -28,10 +27,10 @@ if uploaded_file is not None:
     image = Image.open(uploaded_file)
     st.image(image, caption='Uploaded Image', use_column_width=True)
 
-    # Preprocess image
-    img = np.array(image)
-    img = cv2.resize(img, (IMG_SIZE, IMG_SIZE))
-    img = np.expand_dims(img, axis=0) / 255.0
+    # Preprocess image using PIL
+    img = image.resize((IMG_SIZE, IMG_SIZE))  # Resize
+    img = np.array(img)  # Convert to numpy array
+    img = np.expand_dims(img, axis=0) / 255.0  # Normalize and add batch dimension
 
     # Make prediction
     prediction = model.predict(img)
